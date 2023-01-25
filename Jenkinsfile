@@ -40,7 +40,7 @@ pipeline {
                          echo "Push Docker Image to DockerHub : In Progress"
                          sh 'docker push vaishalishejul/pipeline:first'
                          echo "Push Docker Image to DockerHub : In Progress"
-                         sh 'whoami''
+                         sh 'whoami'
                          }
                       }
                     }
