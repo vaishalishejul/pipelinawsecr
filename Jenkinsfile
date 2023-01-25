@@ -1,0 +1,52 @@
+pipeline {
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
+    }
+
+    agent any
+
+    tools {
+        maven 'maven'
+    }
+    stages {
+        stage('Code Compilation') {
+            steps {
+                echo 'code compilation is starting'
+                sh 'mvn clean compile'
+				echo 'code compilation is completed'
+            }
+        }
+         stage('Building & Tag Docker Image') {
+            steps {
+                echo 'Starting Building Docker Image'
+                sh 'docker build -t vaishalishejul/pipeline-jenkins .'
+                sh 'docker build -t pipeline-jenkins .'
+                echo 'Completed  Building Docker Image'
+            }
+        }
+        stage('Docker Image Scanning') {
+            steps {
+                echo 'Docker Image Scanning Started'
+                sh 'java -version'
+                echo 'Docker Image Scanning Started'
+            }
+        }
+        stage(' Docker push to Docker Hub') {
+                   steps {
+                      script {
+                         withCredentials([string(credentialsId: 'docker', variable: 'docker')]){
+                         sh 'docker login -u vaishalishejul -p ${docker}'
+                         echo "Push Docker Image to DockerHub : In Progress"
+                         sh 'docker push vaishalishejul/pipeline:latest'
+                         echo "Push Docker Image to DockerHub : In Progress"
+                         sh 'whoami'
+                         }
+                      }
+                    }
+                }
+ 
+      
+    }
+
+}
