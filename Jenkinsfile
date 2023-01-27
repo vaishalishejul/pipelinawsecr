@@ -57,7 +57,7 @@ pipeline {
 		 docker tag piplinawsecr:latest 034692783810.dkr.ecr.ap-south-1.amazonaws.com/piplinawsecr:latest
                  echo "Tagging the Docker Image: Completed"
                  echo "Push Docker Image to ECR : In Progress"
-                 docker push 026145495181.dkr.ecr.ap-south-1.amazonaws.com/advik:latest
+                 docker push 034692783810.dkr.ecr.ap-south-1.amazonaws.com/piplinawsecr:latest
                  echo "Push Docker Image to ECR : Completed"
                  """
                  }
