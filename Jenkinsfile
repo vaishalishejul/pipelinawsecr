@@ -17,11 +17,11 @@ pipeline {
 				echo 'code compilation is completed'
             }
         }
-         stage('Building & Tag Docker Image') {
+          stage('Building & Tag Docker Image') {
             steps {
                 echo 'Starting Building Docker Image'
-                sh 'docker build -t vaishalishejul/pipelinawsecr .'
-                sh 'docker build -t pipelinawsecr .'
+                sh 'docker build -t vaishalishejul/pipeline-jenkins .'
+                sh 'docker build -t pipeline-jenkins .'
                 echo 'Completed  Building Docker Image'
             }
         }
@@ -38,7 +38,7 @@ pipeline {
                          withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]){
                          sh 'docker login -u vaishalishejul -p ${dockerhubCred}'
                          echo "Push Docker Image to DockerHub : In Progress"
-                         sh 'docker push vaishalishejul/pipelinawsecr:first'
+                         sh 'docker push vaishalishejul/pipeline:first'
                          echo "Push Docker Image to DockerHub : In Progress"
                          sh 'whoami'
                          }
