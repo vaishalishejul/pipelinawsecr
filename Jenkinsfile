@@ -45,6 +45,19 @@ pipeline {
                       }
                     }
                 }
+	    stage('Deployment') {
+            steps {
+                script {
+                    echo 'Deployment..'
+                    sh 'sudo yum install httpd -y'
+                    sh 'sudo yum install elinks -y'
+                    sh 'sudo systemctl start httpd'
+                    sh 'sudo systemctl enable httpd'
+                    
+                }
+
+            }
+        }
 		
                stage(' Docker Image Push to Amazon ECR') {
            steps {
