@@ -1,7 +1,7 @@
 pipeline {
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '2', artifactNumToKeepStr: '2'))
+        buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
     }
 
     agent any
@@ -17,7 +17,16 @@ pipeline {
 				echo 'code compilation is completed'
             }
         }
-          stage('Building & Tag Docker Image') {
+	stage('code packaging')
+        		{
+        						steps
+        						{
+        						echo 'code packaging started'
+        						sh 'mvn clean package'
+        						echo 'code packaging finished'
+        						}
+							}
+         stage('Building & Tag Docker Image') {
             steps {
                 echo 'Starting Building Docker Image'
                 sh 'docker build -t vaishalishejul/pipeline-jenkins .'
@@ -45,38 +54,6 @@ pipeline {
                       }
                     }
                 }
-	    stage('Deployment') {
-            steps {
-                script {
-                    echo 'Deployment..'
-                    sh 'sudo yum install httpd -y'
-                    sh 'sudo yum install elinks -y'
-                    sh 'sudo systemctl start httpd'
-                    sh 'sudo systemctl enable httpd'
-                    
-                }
-
-            }
-        }
-		
-               stage(' Docker Image Push to Amazon ECR') {
-           steps {
-              script {
-                 withDockerRegistry([credentialsId:'ecr:ap-south-1:awscred', url:"https://026145495181.dkr.ecr.ap-south-1.amazonaws.com"]){
-                 sh """
-                 echo "List the docker images present in local"
-                 docker images
-                 echo "Tagging the Docker Image: In Progress"
-		 docker tag piplinawsecr:latest 034692783810.dkr.ecr.ap-south-1.amazonaws.com/piplinawsecr:latest
-                 echo "Tagging the Docker Image: Completed"
-                 echo "Push Docker Image to ECR : In Progress"
-                 docker push 034692783810.dkr.ecr.ap-south-1.amazonaws.com/piplinawsecr:latest
-                 echo "Push Docker Image to ECR : Completed"
-                 """
-                 }
-              }
-           }
-        }
  
       
     }
